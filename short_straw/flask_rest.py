@@ -15,13 +15,13 @@ class ShortStraw(Resource):
         if session_id == None:
             return sessions
         else:
-            return {session_id: sessions[session_id]}
+            return {session_id: sessions[session_id]}, 200
 
     def put(self, session_id):
         req_data = request.get_json()
         choices = req_data["choices"]
         sessions[session_id] = choices
-        return {session_id: sessions[session_id]}
+        return {session_id: sessions[session_id]}, 201
 
 
 api.add_resource(ShortStraw, '/session/<string:session_id>')
