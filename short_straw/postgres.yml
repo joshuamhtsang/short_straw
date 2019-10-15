@@ -4,7 +4,7 @@ services:
   postgres:
     image: "postgres:latest"
     environment:
-      POSTGRES_DB: short_straw
+      POSTGRES_DB: shortstraw
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     volumes:
@@ -23,4 +23,4 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-    - "5050:5050"
+    - "5050:80"
