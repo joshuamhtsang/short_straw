@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  postgres:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_DB: short_straw
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+    - ./postgres_data:/var/lib/postgresql/data
+    container_name: "shortstraw_postgres"
+    ports:
+    - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    links:
+    - postgres
+    depends_on:
+    - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+    - "5050:5050"
