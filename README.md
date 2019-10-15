@@ -3,7 +3,7 @@ A flask-based API to simulate the age old tradition of drawing straws!
 
 # How to run
 
-$ 
+$ pip3 install -r requirements.txt
 
 $ python3 flask_rest.py
 
