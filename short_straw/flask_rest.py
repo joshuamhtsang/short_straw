@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/short_straw'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/shortstraw'
 db = SQLAlchemy(app)
 
 # Flask RESTful API
@@ -19,10 +19,10 @@ CORS(app)
 sessions = {}
 
 
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(80), unique=True, nullable=False)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
 
 class ShortStraw(Resource):
