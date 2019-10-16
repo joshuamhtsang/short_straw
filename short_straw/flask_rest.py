@@ -7,7 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/shortstraw'
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    'postgresql+psycopg2://admin:admin@127.0.0.1:5432/shortstraw'
 db = SQLAlchemy(app)
 
 # Flask RESTful API
@@ -43,3 +44,5 @@ api.add_resource(ShortStraw, '/session/<string:session_id>')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="2828")
+
+    db.create_all()
