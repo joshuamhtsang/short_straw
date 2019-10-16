@@ -16,3 +16,10 @@ $ curl --header "Content-Type: application/json" --request PUT --data '{"choices
 This creates a 'resource'.  You can now retrieve that session resource:
 
 $ curl --header "Content-Type: application/json" --request GET  localhost:2828/session/my_first_session
+
+# Running the postgres database
+
+$ docker-compose -f postgres.yml up
+
+The tables in the database can be made by running the 'db.create_all()' function
+in flask_rest.py.
