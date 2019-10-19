@@ -44,9 +44,17 @@ class ShortStraw(Resource):
 
     def put(self, session_id):
         req_data = request.get_json()
+        name = session_id
         choices = req_data["choices"]
-        sessions[session_id] = choices
-        return {session_id: sessions[session_id]}, 201
+        #sessions[session_id] = choices
+        new_session = Session(
+            name=name,
+            choices=choices
+        )
+        db.session.add(new_session)
+        db.session.commit()
+        #return {session_id: sessions[session_id]}, 201
+        return True
 
 
 api.add_resource(ShortStraw, '/session/<string:session_id>')
