@@ -26,6 +26,15 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
 
+class Session(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    choices = db.Column(db.ARRAY(db.String()))
+
+    def __repr__(self):
+        return '<Session %r>' % self.name
+
+
 class ShortStraw(Resource):
     def get(self, session_id=None):
         if session_id == None:
@@ -46,3 +55,13 @@ if __name__ == "__main__":
     app.run(host="0.0.0.0", port="2828")
 
     db.create_all()
+
+    josh_session = Session(
+        name='my first session!',
+        choices=''
+    )
+
+    db.session.add(josh_session)
+
+    db.session.commit()
+
