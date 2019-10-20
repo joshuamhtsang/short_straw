@@ -68,16 +68,15 @@ class ShortStraw(Resource):
 api.add_resource(ShortStraw, '/session/<string:session_id>')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="2828")
-
+    # Setup needed tables in database.
     db.create_all()
 
-    josh_session = Session(
-        name='my first session!',
-        choices=''
-    )
-
+    josh_session = Session(name='my first session!', choices='')
     db.session.add(josh_session)
-
     db.session.commit()
+
+    # Run the Flask app.
+    app.run(host="0.0.0.0", port="2828")
+
+
 
