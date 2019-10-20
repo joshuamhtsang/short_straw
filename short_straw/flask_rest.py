@@ -25,15 +25,6 @@ api = Api(app)
 CORS(app)
 
 
-sessions = {}
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -46,23 +37,30 @@ class Session(db.Model):
 class ShortStraw(Resource):
     def get(self, session_id=None):
         if session_id == None:
+            sessions = {}
             return sessions
         else:
-            return {session_id: sessions[session_id]}, 200
+            session = Session.query.filter_by(id=session_id).first()
+            return \
+                {
+                    "id": session.id,
+                    "name": session.name,
+                    "choices": session.choices
+                }, 200
 
     def put(self, session_id):
         req_data = request.get_json()
-        name = session_id
+        id = session_id
+        name = req_data["name"]
         choices = req_data["choices"]
-        #sessions[session_id] = choices
         new_session = Session(
+            id=id,
             name=name,
             choices=choices
         )
         db.session.add(new_session)
         db.session.commit()
-        #return {session_id: sessions[session_id]}, 201
-        return True
+        return True, 201
 
 
 api.add_resource(ShortStraw, '/session/<string:session_id>')
@@ -71,7 +69,7 @@ if __name__ == "__main__":
     # Setup needed tables in database.
     db.create_all()
 
-    josh_session = Session(name='my first session!', choices='')
+    josh_session = Session(name='my first session', choices='')
     db.session.add(josh_session)
     db.session.commit()
 
