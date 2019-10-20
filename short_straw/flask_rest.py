@@ -3,12 +3,20 @@ from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
+import config_postgres as config_pg
+
 
 app = Flask(__name__)
 
 # SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = \
-    'postgresql+psycopg2://admin:admin@127.0.0.1:5432/shortstraw'
+    'postgresql+psycopg2://%s:%s@%s/%s' % \
+    (
+        config_pg.POSTGRES_USER,
+        config_pg.POSTGRES_PW,
+        config_pg.POSTGRES_URL,
+        config_pg.POSTGRES_DB
+     )
 db = SQLAlchemy(app)
 
 # Flask RESTful API
