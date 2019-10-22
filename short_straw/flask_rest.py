@@ -28,10 +28,20 @@ CORS(app)
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    choices = db.Column(db.ARRAY(db.String()))
+    choices = db.relationship('Choice', backref='owner_session')
 
     def __repr__(self):
         return '<Session %r>' % self.name
+
+
+class Choice(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    frequency = db.Column(db.Integer)
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'))
+
+    def __repr__(self):
+        return '<Choice %r>' % self.name
 
 
 class ShortStraw(Resource):
@@ -55,11 +65,17 @@ class ShortStraw(Resource):
         choices = req_data["choices"]
         new_session = Session(
             id=id,
-            name=name,
-            choices=choices
+            name=name
         )
         db.session.add(new_session)
         db.session.commit()
+        for choice in choices:
+            choice_object = Choice(
+                name=choice,
+                owner_session=new_session
+            )
+            db.session.add(choice_object)
+            db.session.commit()
         return True, 201
 
 
@@ -69,7 +85,10 @@ if __name__ == "__main__":
     # Setup needed tables in database.
     db.create_all()
 
-    josh_session = Session(name='my first session', choices='')
+    josh_session = Session(name='my first session')
+    db.session.add(josh_session)
+    db.session.commit()
+    banana = Choice(name='Banana', owner_session=josh_session)
     db.session.add(josh_session)
     db.session.commit()
 
