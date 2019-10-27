@@ -25,6 +25,7 @@ api = Api(app)
 CORS(app)
 
 
+# DB Models
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -44,7 +45,9 @@ class Choice(db.Model):
         return '<Choice %r>' % self.name
 
 
-class ShortStraw(Resource):
+# Flask-API resources to interact with DB.
+class SessionResource(Resource):
+    # Get choices of a session.
     def get(self, session_id=None):
         if session_id == None:
             sessions = {}
@@ -58,6 +61,7 @@ class ShortStraw(Resource):
                     "choices": session.choices
                 }, 200
 
+    # Update the choices of a session.
     def put(self, session_id):
         req_data = request.get_json()
         id = session_id
@@ -79,7 +83,20 @@ class ShortStraw(Resource):
         return True, 201
 
 
-api.add_resource(ShortStraw, '/session/<string:session_id>')
+class SessionListResource(Resource):
+    # Get list of available sessions.
+    def get(self):
+        return None
+
+    # Create a new session.
+    # NOTE TO SELF: Needs to return the ID of the new session assigned by the
+    # database
+    def post(self):
+        return None
+
+
+api.add_resource(SessionResource, '/sessions/<string:session_id>')
+api.add_resource(SessionListResource, '/sessions')
 
 if __name__ == "__main__":
     # Setup needed tables in database.
@@ -109,6 +126,3 @@ if __name__ == "__main__":
 
     # Run the Flask app.
     app.run(host="0.0.0.0", port="2828")
-
-
-
