@@ -85,12 +85,27 @@ if __name__ == "__main__":
     # Setup needed tables in database.
     db.create_all()
 
+    # Creating a test session with 2 choices.
     josh_session = Session(name='my first session')
     db.session.add(josh_session)
-    db.session.commit()
     banana = Choice(name='Banana', owner_session=josh_session)
-    db.session.add(josh_session)
+    apple = Choice(name='Apple', owner_session=josh_session)
+    db.session.add(banana)
+    db.session.add(apple)
     db.session.commit()
+
+    # Retrieving the session created above and its related choices.
+    some_session = Session.query.filter_by(
+        name='my first session'
+    ).first()
+    print(some_session)
+    some_session.choices
+    print(some_session.choices)
+    print(some_session.choices[0])
+    print(some_session.choices[1])
+    print(some_session.choices[0].name)
+    print(some_session.choices[1].name)
+
 
     # Run the Flask app.
     app.run(host="0.0.0.0", port="2828")
