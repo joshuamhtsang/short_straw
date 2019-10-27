@@ -54,45 +54,49 @@ class SessionResource(Resource):
             return sessions
         else:
             session = Session.query.filter_by(id=session_id).first()
+            choices = None
             return \
                 {
                     "id": session.id,
                     "name": session.name,
-                    "choices": session.choices
+                    "choices": None
                 }, 200
 
     # Update the choices of a session.
     def put(self, session_id):
-        req_data = request.get_json()
-        id = session_id
-        name = req_data["name"]
-        choices = req_data["choices"]
-        new_session = Session(
-            id=id,
-            name=name
-        )
-        db.session.add(new_session)
-        db.session.commit()
-        for choice in choices:
-            choice_object = Choice(
-                name=choice,
-                owner_session=new_session
-            )
-            db.session.add(choice_object)
-            db.session.commit()
-        return True, 201
+        return None
 
 
 class SessionListResource(Resource):
     # Get list of available sessions.
     def get(self):
-        return None
+        list = Session.query.all()
+        name_list = [item.name for item in list]
+        return name_list
 
     # Create a new session.
     # NOTE TO SELF: Needs to return the ID of the new session assigned by the
     # database
     def post(self):
-        return None
+        req_data = request.get_json()
+        name = req_data["name"]
+        choices = req_data["choices"]
+        print(choices)
+
+        # Create the new session in the DB and get the assigned ID.
+        new_session = Session(name=name)
+        db.session.add(new_session)
+        db.session.flush()
+        id = new_session.id
+        print("The created session has id: ", id)
+        db.session.commit()
+
+        # Add choices to the new session.
+        for choice in choices.split(','):
+            choice_object = Choice(name=choice, owner_session=new_session)
+            db.session.add(choice_object)
+            db.session.commit()
+        return id, 201
 
 
 api.add_resource(SessionResource, '/sessions/<string:session_id>')
@@ -116,13 +120,15 @@ if __name__ == "__main__":
         name='my first session'
     ).first()
     print(some_session)
-    some_session.choices
+    print(some_session.id)
     print(some_session.choices)
     print(some_session.choices[0])
     print(some_session.choices[1])
     print(some_session.choices[0].name)
     print(some_session.choices[1].name)
 
+    # Retrieval a list of all sessions.
+    print(Session.query.all())
 
     # Run the Flask app.
     app.run(host="0.0.0.0", port="2828")

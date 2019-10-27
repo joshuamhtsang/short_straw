@@ -9,13 +9,18 @@ $ python3 flask_rest.py
 
 # Example requests
 
-Create a new session with name 'my_first_session', id 1234, with 3 choices: Apple, Orange and Banana: 
+Create a new session with name 'my_first_session' with 3 choices: Apple, Orange and Banana: 
 
-$ curl --header "Content-Type: application/json" --request PUT --data '{"name":"my_first_session","choices":["Apple","Orange","Banana"]}' localhost:2828/session/1234
+$ curl --header "Content-Type: application/json" --request POST --data '{"name":"my_first_session","choices":"Apple,Orange,Banana"}' localhost:2828/sessions
 
-This creates a 'resource'.  You can now retrieve that session resource:
+The session will be created with a dynamically assigned ID in the database. To retrieve that session, you need to
+know its ID (session_id):
 
-$ curl --header "Content-Type: application/json" --request GET  localhost:2828/session/1234
+$ curl --header "Content-Type: application/json" --request GET localhost:2828/sessions/<session_id>
+
+To get a full list of all created sessions:
+
+$ curl --header "Content-Type: application/json" --request GET localhost:2828/sessions
 
 # Running the postgres database
 
