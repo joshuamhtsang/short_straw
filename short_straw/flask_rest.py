@@ -66,12 +66,7 @@ class SessionResource(Resource):
         new_choice = Choice(name=choice_name, owner_session=session)
         db.session.add(new_choice)
         db.session.commit()
-        return \
-            {
-                "id": session.id,
-                "name": session.name,
-                "choices": str(choices)
-            }, 200
+        return "Added choice [%s] to [%s]." % (choice_name, session.name), 201
 
 
 class SessionListResource(Resource):
@@ -79,7 +74,7 @@ class SessionListResource(Resource):
     def get(self):
         list = Session.query.all()
         name_list = [item.name for item in list]
-        return name_list
+        return name_list, 200
 
     # Create a new session.
     # NOTE TO SELF: Needs to return the ID of the new session assigned by the
