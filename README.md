@@ -28,3 +28,15 @@ $ docker-compose -f postgres.yml up
 
 The tables in the database can be made by running the 'db.create_all()' function
 in flask_rest.py.
+
+An instance of PgAdmin 4 is also started by the docker-compose
+above.  Access it by navigating to:
+
+http://localhost:5050
+
+By default the username and password are both 'admin'.  Then 'Add New Server' with the following configs:
+
+Server Name: <ARBITUARY>
+Connection Host:  postgres (name of postgres service in docker-compose file)
+Connection Port:  5432
+
