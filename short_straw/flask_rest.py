@@ -49,32 +49,29 @@ class Choice(db.Model):
 class SessionResource(Resource):
     # Get choices of a session.
     def get(self, session_id=None):
-        if session_id is None:
-            sessions = {}
-            return sessions
-        else:
-            session = Session.query.filter_by(id=session_id).first()
-            choices = session.choices
-            return \
-                {
-                    "id": session.id,
-                    "name": session.name,
-                    "choices": str(choices)
-                }, 200
+        session = Session.query.filter_by(id=session_id).first()
+        choices = session.choices
+        return \
+            {
+                "id": session.id,
+                "name": session.name,
+                "choices": str(choices)
+            }, 200
 
     # Update the choices of a session.
     def put(self, session_id=None):
-        if session_id is None:
-            sessions = {}
-            return sessions
-        else:
-            session = Session.query.filter_by(id=session_id).first()
-            choice_name = request.args.get('choice_name')
-            print(choice_name)
-            new_choice = Choice(name=choice_name, owner_session=session)
-            db.session.add(new_choice)
-            db.session.commit()
-        return None
+        session = Session.query.filter_by(id=session_id).first()
+        choice_name = request.args.get('choice_name')
+        print(choice_name)
+        new_choice = Choice(name=choice_name, owner_session=session)
+        db.session.add(new_choice)
+        db.session.commit()
+        return \
+            {
+                "id": session.id,
+                "name": session.name,
+                "choices": str(choices)
+            }, 200
 
 
 class SessionListResource(Resource):
